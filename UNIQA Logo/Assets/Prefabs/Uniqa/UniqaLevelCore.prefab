@@ -5133,30 +5133,7 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 64241485801895418, guid: 591ef0ca86b9acc4dac396e89a878841, type: 3}
-    - {fileID: 64241484280093841, guid: 591ef0ca86b9acc4dac396e89a878841, type: 3}
-    - {fileID: 64743144684195494, guid: 591ef0ca86b9acc4dac396e89a878841, type: 3}
-    - {fileID: 64227840555825542, guid: 591ef0ca86b9acc4dac396e89a878841, type: 3}
-    - {fileID: 64544777930636683, guid: 591ef0ca86b9acc4dac396e89a878841, type: 3}
-    - {fileID: 64544777545044981, guid: 591ef0ca86b9acc4dac396e89a878841, type: 3}
-    - {fileID: 64476010999192228, guid: 591ef0ca86b9acc4dac396e89a878841, type: 3}
-    - {fileID: 64937420311052485, guid: 591ef0ca86b9acc4dac396e89a878841, type: 3}
-    - {fileID: 64302918784298686, guid: 591ef0ca86b9acc4dac396e89a878841, type: 3}
-    - {fileID: 64747363789870742, guid: 591ef0ca86b9acc4dac396e89a878841, type: 3}
-    - {fileID: 64341486669868085, guid: 591ef0ca86b9acc4dac396e89a878841, type: 3}
-    - {fileID: 64552995737316523, guid: 591ef0ca86b9acc4dac396e89a878841, type: 3}
-    - {fileID: 64552997031661741, guid: 591ef0ca86b9acc4dac396e89a878841, type: 3}
-    - {fileID: 64283789376173528, guid: 591ef0ca86b9acc4dac396e89a878841, type: 3}
-    - {fileID: 64174945946497038, guid: 591ef0ca86b9acc4dac396e89a878841, type: 3}
-    - {fileID: 64196627988582458, guid: 591ef0ca86b9acc4dac396e89a878841, type: 3}
-    - {fileID: 64976535157590980, guid: 591ef0ca86b9acc4dac396e89a878841, type: 3}
-    - {fileID: 65534869332848570, guid: 591ef0ca86b9acc4dac396e89a878841, type: 3}
-    - {fileID: 64312095985891360, guid: 591ef0ca86b9acc4dac396e89a878841, type: 3}
-    - {fileID: 64724679764345420, guid: 591ef0ca86b9acc4dac396e89a878841, type: 3}
-    - {fileID: 64719117792183496, guid: 591ef0ca86b9acc4dac396e89a878841, type: 3}
-    - {fileID: 64165149720395936, guid: 591ef0ca86b9acc4dac396e89a878841, type: 3}
-    - {fileID: 7125574186882946651, guid: 591ef0ca86b9acc4dac396e89a878841, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 591ef0ca86b9acc4dac396e89a878841, type: 3}
 --- !u!4 &7125574185580158298 stripped
 Transform:
@@ -5409,6 +5386,10 @@ PrefabInstance:
     - target: {fileID: 8762091057456912422, guid: 13f65ca8b1c1e1943980ceedc396ab4a, type: 3}
       propertyPath: m_Name
       value: Glass
+      objectReference: {fileID: 0}
+    - target: {fileID: 8762091057456912422, guid: 13f65ca8b1c1e1943980ceedc396ab4a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8762091057456912423, guid: 13f65ca8b1c1e1943980ceedc396ab4a, type: 3}
       propertyPath: m_RootOrder

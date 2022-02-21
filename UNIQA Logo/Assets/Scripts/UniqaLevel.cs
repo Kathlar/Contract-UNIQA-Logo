@@ -27,6 +27,8 @@ public class UniqaLevel : MonoBehaviour
         glassNumbers.Add(mustBeGlassNumber);
         glassNumbers.Add(mustBeAnotherGlass);
         glassNumbers.Add(mustBeAnotherGlass);
+        glassNumbers.Add(mustBeAnotherGlass);
+        glassNumbers.Add(mustBeAnotherGlass);
         for (int i = 0; i < 5; i++)
         {
             bool isGlass = Random.Range(0f, 1f) < .25f;

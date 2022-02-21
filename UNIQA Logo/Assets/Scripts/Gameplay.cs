@@ -24,7 +24,6 @@ public class Gameplay : MonoBehaviour
     private bool playing, ending;
     public float speed = 4;
     private float maxSpeed;
-    private Vector3 startPositionOfTopLevel;
     public GameObject camEnd1, camEnd2;
     
     public GameObject arrowsParent;
@@ -44,7 +43,6 @@ public class Gameplay : MonoBehaviour
         for (int i = 7; i < levels.Count; i++)
             levels[i].Randomize(i, levels[i-1]);
 
-        startPositionOfTopLevel = levels[levels.Count - 1].transform.localPosition;
         levelCount = levels.Count;
         maxSpeed = speed * 1.5f;
     }
@@ -63,9 +61,9 @@ public class Gameplay : MonoBehaviour
                 levels.RemoveAt(0);
                 bottomLevel.transform.localPosition = 
                     levels[levels.Count - 2].transform.localPosition + Vector3.up * 3.5f;
-                bottomLevel.Randomize(levelCount, levels[levels.Count - 2]);
+                if (!ending) bottomLevel.Randomize(levelCount, levels[levels.Count - 2]);
+                else playing = false;
                 levelCount++;
-                if (ending) playing = false;
             }
             
             if (Input.GetKeyDown(KeyCode.G)) Finish();

@@ -132,7 +132,7 @@ MonoBehaviour:
     max: 1
   sobelThin:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 1
   DepthNormalsShader: {fileID: 4800000, guid: 516d67fad41db074ca871164dfde9e71, type: 3}
 --- !u!114 &-3229105173312937712
 MonoBehaviour:
