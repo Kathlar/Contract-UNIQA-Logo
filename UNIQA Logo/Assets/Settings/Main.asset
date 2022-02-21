@@ -62,6 +62,78 @@ MonoBehaviour:
     m_Value: 0
     min: -180
     max: 180
+--- !u!114 &-5037585635565402292
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8ca37f13bb89c144a71832585b7a6ac, type: 3}
+  m_Name: EdgeDetection
+  m_EditorClassIdentifier: 
+  active: 1
+  m_AdvancedMode: 0
+  debug:
+    m_OverrideState: 1
+    m_Value: 0
+  mode:
+    m_OverrideState: 1
+    m_Value: 2
+  invertFadeDistance:
+    m_OverrideState: 1
+    m_Value: 0
+  distanceFade:
+    m_OverrideState: 1
+    m_Value: 0
+  startFadeDistance:
+    m_OverrideState: 1
+    m_Value: 0
+  endFadeDistance:
+    m_OverrideState: 1
+    m_Value: 1000
+  sensitivityDepth:
+    m_OverrideState: 1
+    m_Value: 0
+    min: 0
+    max: 1
+  sensitivityNormals:
+    m_OverrideState: 1
+    m_Value: 1
+    min: 0
+    max: 1
+  lumThreshold:
+    m_OverrideState: 1
+    m_Value: 0.01
+    min: 0.01
+    max: 1
+  edgeColor:
+    m_OverrideState: 1
+    m_Value: {r: 0, g: 0, b: 0, a: 1}
+    hdr: 0
+    showAlpha: 1
+    showEyeDropper: 1
+  edgeExp:
+    m_OverrideState: 1
+    m_Value: 1
+    min: 1
+    max: 50
+  edgeSize:
+    m_OverrideState: 1
+    m_Value: 1
+    min: 1
+    max: 4
+  edgeOpacity:
+    m_OverrideState: 1
+    m_Value: 1
+    min: 0
+    max: 1
+  sobelThin:
+    m_OverrideState: 1
+    m_Value: 0
+  DepthNormalsShader: {fileID: 4800000, guid: 516d67fad41db074ca871164dfde9e71, type: 3}
 --- !u!114 &-3229105173312937712
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -311,6 +383,7 @@ MonoBehaviour:
   - {fileID: -6416282534534468909}
   - {fileID: 6890096808675000056}
   - {fileID: -3229105173312937712}
+  - {fileID: -5037585635565402292}
 --- !u!114 &6890096808675000056
 MonoBehaviour:
   m_ObjectHideFlags: 3
