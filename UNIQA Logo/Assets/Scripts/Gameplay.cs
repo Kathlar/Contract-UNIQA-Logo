@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class Gameplay : MonoBehaviour
 {
@@ -25,10 +27,16 @@ public class Gameplay : MonoBehaviour
     public float speed = 4;
     private float maxSpeed;
     public GameObject camEnd1, camEnd2;
+
+    public GameObject[] winElements, loseElements;
     
     public GameObject arrowsParent;
 
     private int levelCount;
+    public static int collectedCollectibles;
+
+    public MeshRenderer[] winLetters;
+    public Material winMaterial;
     
     public enum State
     {
@@ -36,8 +44,9 @@ public class Gameplay : MonoBehaviour
     }
     private State state = State.beforeStart;
 
-    private void Start()
+    private IEnumerator Start()
     {
+        collectedCollectibles = 0;
         SetState(State.beforeStart);
         
         for (int i = 7; i < levels.Count; i++)
@@ -45,6 +54,26 @@ public class Gameplay : MonoBehaviour
 
         levelCount = levels.Count;
         maxSpeed = speed * 1.5f;
+
+        foreach (GameObject go in winElements)
+            go.SetActive(false);
+        foreach (GameObject go in loseElements)
+            go.SetActive(false);
+
+        Color logoColor = uniqaLogo.color;
+        logoColor.a = 1;
+        uniqaLogo.color = logoColor;
+        uniqaLogo.gameObject.SetActive(true);
+
+        yield return new WaitForSeconds(3);
+        do
+        {
+            logoColor.a -= Time.deltaTime;
+            uniqaLogo.color = logoColor;
+            yield return null;
+        } while (logoColor.a > 0);
+
+        uniqaLogo.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -66,10 +95,10 @@ public class Gameplay : MonoBehaviour
                 levelCount++;
             }
             
-            if (Input.GetKeyDown(KeyCode.G)) Finish();
-
             speed = Mathf.Clamp(speed + Time.deltaTime / 25, speed, maxSpeed);
         }
+
+        if (Input.GetKeyDown(KeyCode.R)) SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void SetState(int state)
@@ -109,15 +138,17 @@ public class Gameplay : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         chosenCharacter.animator.SetTrigger("Gameplay");
+        chosenCharacter.transform.rotation = gameplayCharacterPosition.rotation;
         do
         {
             chosenCharacter.transform.position = Vector3.MoveTowards(chosenCharacter.transform.position,
                 gameplayCharacterPosition.position, Time.deltaTime * 10);
-            chosenCharacter.transform.rotation = gameplayCharacterPosition.rotation;
             yield return null;
         } while (Vector3.Distance(chosenCharacter.transform.position, gameplayCharacterPosition.position) > .1f);
-
+        chosenCharacter.transform.rotation = gameplayCharacterPosition.rotation;
+        
         chosenCharacter.animator.SetTrigger("OnBuilding");
+        chosenCharacter.landParticles.Play();
         yield return new WaitForSeconds(1f);
 
         countdownText.text = "3";
@@ -129,6 +160,7 @@ public class Gameplay : MonoBehaviour
         countdownText.text = "";
         
         chosenCharacter.animator.SetTrigger("Run");
+        chosenCharacter.runParticles.Play();
         playing = true;
         chosenCharacter.StartGameplay();
         arrowsParent.SetActive(true);
@@ -140,28 +172,95 @@ public class Gameplay : MonoBehaviour
         chosenCharacter = left ? leftCharacter : rightCharacter;
     }
 
-    public void Finish()
+    public void PressedMovementButton(bool right)
     {
+        chosenCharacter.PressedMoveButton(right);
+    }
+
+    public void Lose(Room room)
+    {
+        if (!playing || ending) return;
         int numb = levels.Count - 5;
         levels[0].SetFinished();
         for (int i = numb; i < levels.Count; i++)
             levels[i].SetFinished();
-        SetState(State.ending);
         ending = true;
         speed = 20;
-
-        StartCoroutine(FinishCoroutine());
+        chosenCharacter.OnLose(room.landPoint, collectedCollectibles >= 5);
+        StartCoroutine(OnLostCoroutine(room));
+        room.ShowCamera(true);
+        chosenCharacter.runParticles.Stop();
     }
-    
-    private IEnumerator FinishCoroutine()
+
+    private IEnumerator OnLostCoroutine(Room room)
     {
-        yield return new WaitForSeconds(7);
+        bool won = collectedCollectibles >= 5;
+        if (won) Waving.Wave();
+        
+        yield return new WaitForSeconds(6);
+        room.ShowCamera(false);
+        SetState(State.ending);
+        yield return new WaitForSeconds(3);
+        Material lostMaterial = winLetters[0].material;
+        for (int i = 0; i < collectedCollectibles; i++)
+        {
+            for (int j = 0; j < Random.Range(3, 7); j++)
+            {
+                winLetters[i].material = winMaterial;
+                yield return new WaitForSeconds(.1f);
+                winLetters[i].material = lostMaterial;
+                yield return new WaitForSeconds(Random.Range(0.06f, .2f));
+            }
+            winLetters[i].material = winMaterial;
+            yield return new WaitForSeconds(.5f);
+        }
+
+        if (!won)
+        {
+            for (int i = 0; i < collectedCollectibles; i++)
+            {
+                for (int j = 0; j < Random.Range(1, 4); j++)
+                {
+                    winLetters[i].material = lostMaterial;
+                    yield return new WaitForSeconds(.1f);
+                    winLetters[i].material = winMaterial;
+                    yield return new WaitForSeconds(Random.Range(0.06f, .2f));
+                }
+                winLetters[i].material = lostMaterial;
+                yield return new WaitForSeconds(.5f);
+            }
+        }
+        yield return new WaitForSeconds(2);
+        foreach (GameObject gameObject in winElements)
+            gameObject.SetActive(won);
+        foreach (GameObject gameObject in loseElements)
+            gameObject.SetActive(!won);
         camEnd2.SetActive(true);
         camEnd1.SetActive(false);
     }
 
-    public void PressedMovementButton(bool right)
+    private bool restarting;
+    public Image uniqaLogo;
+    public void RestartGame()
     {
-        chosenCharacter.PressedMoveButton(right);
+        if (restarting) return;
+        restarting = true;
+        StartCoroutine(RestartGameCoroutine());
+    }
+
+    IEnumerator RestartGameCoroutine()
+    {
+        Color logoColor = uniqaLogo.color;
+        logoColor.a = 0;
+        uniqaLogo.color = logoColor;
+        uniqaLogo.gameObject.SetActive(true);
+        do
+        {
+            logoColor.a += Time.deltaTime;
+            uniqaLogo.color = logoColor;
+            yield return null;
+        } while (logoColor.a < 1);
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

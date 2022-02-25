@@ -16,6 +16,9 @@ public class Character : MonoBehaviour
     private bool changingPosition;
     public float speed = 5;
 
+    public ParticleSystem landParticles, runParticles;
+    private bool lost;
+
     private void Awake()
     {
         animator = GetComponentInChildren<Animator>();
@@ -45,6 +48,7 @@ public class Character : MonoBehaviour
 
     private void Update_Gameplay()
     {
+        if (lost) return;
         if (!changingPosition)
         {
             if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) PressedMoveButton(false);
@@ -71,5 +75,46 @@ public class Character : MonoBehaviour
     public void StartGameplay()
     {
         beforeStart = false;
+    }
+
+    public Transform tt;
+    public void OnLose(Transform targetPoint, bool won)
+    {
+        transform.SetParent(targetPoint);
+        if (lost) return;
+        lost = true;
+        tt = targetPoint;
+        StartCoroutine(OnLoseCoroutine(targetPoint, won));
+    }
+
+    private IEnumerator OnLoseCoroutine(Transform targetPoint, bool won)
+    {
+        animator.SetTrigger("Gameplay");
+        do
+        {
+            transform.localPosition = Vector3.MoveTowards(transform.localPosition, Vector3.zero,
+                Time.deltaTime * 10);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetPoint.rotation,
+                Time.deltaTime * 400);
+            yield return null;
+        } while (Vector3.Distance(transform.localPosition, Vector3.zero) > .05f);
+
+        animator.applyRootMotion = true;
+        transform.localPosition = Vector3.zero;
+        transform.rotation = targetPoint.rotation;
+        
+        animator.SetTrigger("OnBuilding");
+        yield return new WaitForSeconds(1);
+        animator.SetTrigger("InBuilding");
+        yield return new WaitForSeconds(1);
+        animator.SetBool("Won", won);
+        animator.SetTrigger("Finish");
+        Quaternion targetRot = Quaternion.LookRotation(-transform.forward);
+        do
+        {
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRot,
+                Time.deltaTime * 100);
+            yield return null;
+        } while (Quaternion.Angle(transform.rotation, targetRot) > 1);
     }
 }
