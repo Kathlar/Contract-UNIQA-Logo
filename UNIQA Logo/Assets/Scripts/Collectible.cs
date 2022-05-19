@@ -10,7 +10,6 @@ public class Collectible : MonoBehaviour
     
     private void Update()
     {
-        transform.Rotate(0, Time.deltaTime * 50, 0);
     }
 
     private void OnTriggerEnter(Collider other)

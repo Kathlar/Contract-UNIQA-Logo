@@ -32,6 +32,8 @@ public class UniqaLevel : MonoBehaviour
         if (mustBeGlassNumber == 0) mustBeAnotherGlassOnLeft = false;
         else if (mustBeGlassNumber == 4) mustBeAnotherGlassOnLeft = true;
         int mustBeAnotherGlass = mustBeGlassNumber + (mustBeAnotherGlassOnLeft ? -1 : 1);
+        if (mustBeAnotherGlass < 0) mustBeAnotherGlass = 1;
+        else if (mustBeAnotherGlass > 4) mustBeAnotherGlass = 3;
         glassNumbers.Add(mustBeGlassNumber);
         glassNumbers.Add(mustBeAnotherGlass);
         glassNumbers.Add(mustBeAnotherGlass);
@@ -46,7 +48,7 @@ public class UniqaLevel : MonoBehaviour
             rooms[i].gameObject.SetActive(!isGlass);
         }
 
-        if (level % 20 == 19)
+        if (level % 12 == 11)
         {
             glass[mustBeAnotherGlass].collectibles[Gameplay.collectedCollectibles].gameObject.SetActive(true);
         }

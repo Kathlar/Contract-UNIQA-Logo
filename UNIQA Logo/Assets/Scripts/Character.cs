@@ -49,23 +49,17 @@ public class Character : MonoBehaviour
     private void Update_Gameplay()
     {
         if (lost) return;
-        if (!changingPosition)
-        {
-            if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) PressedMoveButton(false);
-            else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) PressedMoveButton(true);
-        }
-        else
-        {
-            transform.position = Vector3.MoveTowards(transform.position, 
-                runCharacterPositions[currentPosition].position, Time.deltaTime * speed);
-            if (Vector3.Distance(transform.position, runCharacterPositions[currentPosition].position) < .1f)
-                changingPosition = false;
-        }
+        if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) PressedMoveButton(false);
+        else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) PressedMoveButton(true);
+        transform.position = Vector3.MoveTowards(transform.position, 
+            runCharacterPositions[currentPosition].position, Time.deltaTime * speed);
+        if (Vector3.Distance(transform.position, runCharacterPositions[currentPosition].position) < .1f)
+            changingPosition = false;
     }
 
     public void PressedMoveButton(bool right)
     {
-        if (beforeStart || changingPosition) return;
+        if (beforeStart) return;
         if (!right && currentPosition <= 0) return;
         if (right && currentPosition >= 4) return;
         changingPosition = true;

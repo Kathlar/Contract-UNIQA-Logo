@@ -36,6 +36,7 @@ public class Gameplay : MonoBehaviour
     public static int collectedCollectibles;
 
     public MeshRenderer[] winLetters;
+    public MeshRenderer[] winLogo;
     public Material winMaterial;
     
     public enum State
@@ -195,7 +196,6 @@ public class Gameplay : MonoBehaviour
     private IEnumerator OnLostCoroutine(Room room)
     {
         bool won = collectedCollectibles >= 5;
-        if (won) Waving.Wave();
         
         yield return new WaitForSeconds(6);
         room.ShowCamera(false);
@@ -224,12 +224,17 @@ public class Gameplay : MonoBehaviour
                     winLetters[i].material = lostMaterial;
                     yield return new WaitForSeconds(.1f);
                     winLetters[i].material = winMaterial;
-                    yield return new WaitForSeconds(Random.Range(0.06f, .2f));
+                    yield return new WaitForSeconds(Random.Range(0.02f, .1f));
                 }
                 winLetters[i].material = lostMaterial;
-                yield return new WaitForSeconds(.5f);
+                yield return new WaitForSeconds(.1f);
             }
         }
+        else
+            foreach (MeshRenderer meshRenderer in winLogo)
+            {
+                meshRenderer.material = winMaterial;
+            }
         yield return new WaitForSeconds(2);
         foreach (GameObject gameObject in winElements)
             gameObject.SetActive(won);
